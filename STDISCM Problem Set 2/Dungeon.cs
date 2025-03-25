@@ -15,6 +15,16 @@ public class Dungeon
     {
         this.id = id;
         this.state = State.EMPTY;
-        this.thread = new Thread(() => this.Run());
+        this.thread = new Thread(Run);
+    }
+
+    public void Start()
+    {
+        this.thread.Start();
+    }
+
+    private void Run()
+    {
+        
     }
 }
