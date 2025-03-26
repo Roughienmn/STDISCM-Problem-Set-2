@@ -80,9 +80,8 @@
         return true;
     }
     
-    static void printDungeonStatus()
+    public static void printDungeonStatus()
     {
-        Console.WriteLine();
         foreach (var dungeon in dungeons)
         {
             dungeon.PrintStatus();
@@ -119,8 +118,6 @@
                 dpsCount -= 3;
             }
 
-            printDungeonStatus();
-
             currIndex++;
             Thread.Sleep(100);
         }
@@ -142,7 +139,6 @@
             }
             if (!allEmpty)
             {
-                printDungeonStatus();
                 Thread.Sleep(100);
             }
         } while (!allEmpty);
