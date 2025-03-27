@@ -57,6 +57,12 @@
             return false;
         }
 
+        if (n > 1000)
+        {
+            Console.WriteLine("Dungeon count is too large.");
+            return false;
+        }
+
         if (t_2 > 15)
         {
             Console.WriteLine("Input value for t2 is greater than 15. Setting to 15.");
