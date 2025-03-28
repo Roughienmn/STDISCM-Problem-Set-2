@@ -11,7 +11,7 @@ class Program
     static bool ReadConfig()
     {
         uint n = 0, t = 0, h = 0, d = 0, t_1 = 0, t_2 = 0;
-        string[] lines = File.ReadAllLines("config.txt");
+        string[] lines = File.ReadAllLines("..\\..\\..\\config.txt");
         foreach (string line in lines)
         {
             string commentLine = line.Split("//")[0];
