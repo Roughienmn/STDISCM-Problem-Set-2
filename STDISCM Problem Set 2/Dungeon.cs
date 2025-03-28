@@ -34,7 +34,7 @@ public class Dungeon
 
     private void Run()
     {
-        while (!Program.emptyQueue)
+        while (!Program.emptyGroupQueue)
         {
             if(this.state == State.EMPTY)
             {
@@ -42,14 +42,14 @@ public class Dungeon
             }
             int sleepTime = new Random().Next((int)Program.t1, (int)Program.t2);
             Console.WriteLine("\nDungeon {0} now has a party.", this.id);
-            Program.printDungeonStatus();
+            this.PrintStatus();
             this.partyCount++;
             this.totalTimeServed += (uint)sleepTime;
             Thread.Sleep(sleepTime*1000);
 
             this.state = State.EMPTY;
             Console.WriteLine("\nDungeon {0}'s party has finished.", this.id);
-            Program.printDungeonStatus();
+            this.PrintStatus();
         }
     }
 

@@ -1,8 +1,13 @@
-﻿class Program
+﻿using System.Collections.Concurrent;
+
+class Program
 {
     public static uint dungeonCount, tankCount, healerCount, dpsCount, t1, t2;
-    public static bool emptyQueue = false;
+    public static bool emptyGroupQueue = false;
     private static Dungeon[] dungeons;
+    private static ConcurrentQueue<Dungeon> emptyQueue = new ConcurrentQueue<Dungeon>();
+    private static ConcurrentQueue<Dungeon> activeQueue = new ConcurrentQueue<Dungeon>();
+
     static bool ReadConfig()
     {
         uint n = 0, t = 0, h = 0, d = 0, t_1 = 0, t_2 = 0;
@@ -109,26 +114,37 @@
         {
             dungeons[i] = new Dungeon(i);
             dungeons[i].Start();
+            emptyQueue.Enqueue(dungeons[i]);
         }
 
-        uint currIndex = 0;
 
         while (tankCount > 1 && healerCount > 1 && dpsCount > 3)
         {   
-            currIndex = currIndex % dungeonCount;
-            if (dungeons[currIndex].CurrentState == Dungeon.State.EMPTY)
+            if (activeQueue.TryDequeue(out Dungeon activeDungeon))
             {
-                dungeons[currIndex].AddParty();
+                if(activeDungeon.CurrentState == Dungeon.State.EMPTY)
+                {
+                    emptyQueue.Enqueue(activeDungeon);
+                }
+                else
+                {
+                    activeQueue.Enqueue(activeDungeon);
+                }
+            }
+
+            if (emptyQueue.TryDequeue(out Dungeon emptyDungeon))
+            {
+                emptyDungeon.AddParty();
                 tankCount--;
                 healerCount--;
                 dpsCount -= 3;
+                activeQueue.Enqueue(emptyDungeon);
             }
 
-            currIndex++;
             Thread.Sleep(100);
         }
 
-        emptyQueue = true;
+        emptyGroupQueue = true;
 
         // No more possible parties to add, wait for all dungeons to be empty
         bool allEmpty;
