@@ -56,9 +56,20 @@ class Program
             }
         }
 
-        if (n == 0 || t == 0 || h == 0 || d == 0 || t_1 == 0 || t_2 == 0)
+        if (n == 0)
         {
-            Console.WriteLine("Input values must be greater than 0");
+            Console.WriteLine("Dungeon instances must be greater than 0.");
+            return false;
+        }
+
+        if (t < 1 || h < 1 || d < 3)
+        {
+            Console.WriteLine("Not enough members to form a full group.");
+            return false;
+        }
+        if (t_1 == 0 || t_2 == 0)
+        {
+            Console.WriteLine("Time to complete dungeon must be greater than 0");
             return false;
         }
 
@@ -70,14 +81,13 @@ class Program
 
         if (t_2 > 15)
         {
-            Console.WriteLine("Input value for t2 is greater than 15. Setting to 15.");
-            t_2 = 15;
+            Console.WriteLine("Input value for t2 is greater than 15.");
+            return false;
         }
 
         if (t_1 > t_2)
         {
-            Console.WriteLine("Value for t1 cannot be greater than t2. Setting t1 to be equal to t2");
-            t_1 = t_2;
+            Console.WriteLine("Value for t1 cannot be greater than t2 nor greater than 15.");
             return false;
         }
 
@@ -91,14 +101,6 @@ class Program
         return true;
     }
     
-    public static void printDungeonStatus()
-    {
-        foreach (var dungeon in dungeons)
-        {
-            dungeon.PrintStatus();
-        }
-    }
-    
     static void Main(string[] args)
     {
         if (!ReadConfig())
@@ -108,6 +110,11 @@ class Program
         }
 
         Console.WriteLine("Config file read successfully!");
+        Console.WriteLine("Dungeon instance count: {0}", dungeonCount);
+        Console.WriteLine("Tank player count: {0}", tankCount);
+        Console.WriteLine("Healer player count: {0}", healerCount);
+        Console.WriteLine("DPS player count: {0}", dpsCount);
+        Console.WriteLine("Time to complete dungeon: {0} - {1}", t1, t2);
 
         dungeons = new Dungeon[dungeonCount];
         for (uint i = 0; i < dungeonCount; i++)
@@ -118,7 +125,7 @@ class Program
         }
 
 
-        while (tankCount > 1 && healerCount > 1 && dpsCount > 3)
+        while (tankCount >= 1 && healerCount >= 1 && dpsCount >= 3)
         {   
             if (activeQueue.TryDequeue(out Dungeon activeDungeon))
             {
@@ -172,6 +179,8 @@ class Program
         }
 
         Console.WriteLine();
+
+        Console.WriteLine("Dungeon Stats Summary:");
 
         foreach (var dungeon in dungeons)
         {

@@ -48,7 +48,7 @@ public class Dungeon
             Thread.Sleep(sleepTime*1000);
 
             this.state = State.EMPTY;
-            Console.WriteLine("\nDungeon {0}'s party has finished.", this.id);
+            Console.WriteLine("\nDungeon {0}'s party has finished after {1} seconds.", this.id, sleepTime);
             this.PrintStatus();
         }
     }
